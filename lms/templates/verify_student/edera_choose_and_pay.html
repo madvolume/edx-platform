@@ -1,0 +1,174 @@
+<%! from django.utils.translation import ugettext as _ %>
+<%! from django.core.urlresolvers import reverse %>
+<%! from lms.envs.common import TECH_SUPPORT_EMAIL %>
+<%inherit file="../main.html" />
+<%namespace name='static' file='/static_content.html'/>
+<%block name="pagetitle">
+    ${_("Register for {} | Verification").format(course_name)}
+</%block>
+<%block name="js_extra">
+<script src="${static.url('js/vendor/responsive-carousel/responsive-carousel.js')}"></script>
+<script src="${static.url('js/vendor/responsive-carousel/responsive-carousel.keybd.js')}"></script>
+<script src="${static.url('js/verify_student/edera_payment.js')}"></script>
+<script>
+   (function (require) {
+      require(["backbone", "jquery", "js/verify_student/views/edera_payment/EdEraPaymentView"], function (Backbone, jQuery, EdEraPaymentView) {
+          var suggested_prices = [];
+            % for price in suggested_prices:
+                suggested_prices.push(${price});
+            % endfor
+          var model = new Backbone.Model({
+            organization: "${course_org}",
+            course_num: "${course_num}",
+            course_name: "${course_name}",
+            user_full_name: "${user_full_name}",
+            currency: "${currency}",
+            chosen_price: ${chosen_price},
+            min_price: ${min_price},
+            suggested_prices: suggested_prices,
+            purchase_endpoint: "${purchase_endpoint}",
+            course_id: "${course_id}",
+            csrf_token: "${csrf_token}"
+
+          });
+          var paymentView = new EdEraPaymentView({
+            model: model,
+            el: jQuery(".container.verification-process")
+          });
+          paymentView.render();
+    });
+  }).call(this, require || RequireJS.require);
+</script>
+</%block>
+<style>
+  /* PAYMENT */
+  .verification-process {
+    width: 960px;
+    margin: 50px auto;
+  }
+  .verification-process h3 {
+    text-align: center;
+    font-size: 20px;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+  .verification-process .contributions-row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  .verification-process .contribution-button-wrapper {
+    width: 300px;
+    margin: 20px 10px;
+    float: left;
+    background-color: #fff;
+  }
+  .verification-process .contribution-button {
+    height: 160px;
+    -webkit-transition: all 0.1s linear;
+    -moz-transition: all 0.1s linear;
+    -ms-transition: all 0.1s linear;
+    -o-transition: all 0.1s linear;
+    transition: all 0.1s linear;
+    box-shadow: 0 0 1px rgba(34, 25, 25, 0.4);
+    border-radius: 2px;
+    padding: 20px;
+    cursor: pointer;
+  }
+  .verification-process .contribution-button:hover {
+    box-shadow: 0 0 1px rgba(34, 25, 25, 0.8);
+  }
+  .verification-process .contribution-button.active {
+    background-color: #fffdd6;
+    box-shadow: 0 0 1px rgba(34, 25, 25, 0.8);
+  }
+  .verification-process .contribution-price {
+    font-size: 2em;
+    margin-bottom: 20px;
+    font-weight: bold;
+    height: 45px;
+  }
+  .verification-process .contribution-price input {
+    width: 250px;
+  }
+  .verification-process .contribution-description {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .verification-process .free {
+    font-size: 14px;
+    font-style: italic;
+    color: #444;
+    line-height: 1.4;
+    width: 940px;
+    margin: 20px auto 40px;
+  }
+  .verification-process .decision {
+    width: 940px;
+    margin: 20px auto;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  .verification-process #pay_form {
+    width: 940px;
+    margin: 20px auto;
+  }
+  .verification-process #pay_button {
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: top;
+    zoom: 1;
+    *display: inline;
+    text-decoration: none;
+    padding: 10px 15px 8px;
+    line-height: 1;
+    border: 2px solid #2993de;
+    color: #2993de;
+    background-color: transparent;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-size: 14px;
+    box-shadow: 0 0 1px rgba(34, 25, 25, 0.4);
+    font-weight: bold;
+  }
+  .verification-process #pay_button:hover {
+    background-color: #2993de;
+    color: white ;
+  }
+
+  .contributions-row {
+    width: 960px;
+  }
+
+  .verification-process .contribution-button {
+    height: 210px;
+  }
+
+  .desicion .chosen_price{
+    font-weight: inherit;
+    color: inherit;
+    font-size: 120%;
+  }
+
+  #pay_button.action-primary {
+    border: 2px solid #2993de !important;
+    color: #2993de !important;
+  }
+  #pay_button.action-primary:hover {
+    background-color: #2993de !important ;
+    color: white !important;
+  }
+  .verification-process .description {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.4;
+    width: 940px;
+    margin: 20px auto 40px;
+  }
+</style>
+<%block name="content">
+
+<div class="container verification-process"></div>
+</%block>

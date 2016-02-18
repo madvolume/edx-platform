@@ -1,0 +1,43 @@
+<%!
+from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
+%>
+<%namespace file='main.html' import="login_query, stanford_theme_enabled"/>
+<%namespace name='static' file='static_content.html'/>
+
+
+<header>
+  <h3 class="sr">${_("Registration Help")}</h3>
+</header>
+
+% if has_extauth_info is UNDEFINED:
+
+<div class="cta cta-login">
+  <h3 class="title">${_("Already registered?")}</h3>
+  <p class="instructions">
+    <a class="cta-login-action" href="${reverse('signin_user')}${login_query()}">
+      ${_("Log in")}
+    </a>
+  </p>
+</div>
+
+% endif
+
+## TODO: Use a %block tag or something to allow themes to
+##       override in a more generalizable fashion.
+% if not stanford_theme_enabled():
+  <div class="cta cta-welcome">
+    <h3>${_("Welcome to {platform_name}").format(platform_name=platform_name)}</h3>
+    <p>Реєстрація на EdEra надасть вам можливість записуватися на курси та отримувати поштову розсилку з новинами та анонсами проекту.</p>
+  </div>
+% endif
+
+<div class="cta cta-nextsteps">
+  <h3>АКТИВАЦІЙНИЙ ЛИСТ</h3>
+    <p>Після відправки цієї форми ви отримаєте лист активації облікового запису. Перейдіть за посиланням, щоб завершити реєстрацію. Уважно перевіряйте папку «Спам», якщо лист не надійшов. Щоб такого не трапилося в майбутньому, позначте листи від EdEra як «Не спам».</p>
+</div>
+
+<div class="cta cta-help">
+  <h3>ЗАЛИШИЛИСЬ ЗАПИТАННЯ?</h3>
+  <p>Пишіть нам на <a target="_blank" href="mailto:info@ed-era.com?subject=Help">info@ed-era.com</a> або зв'яжіться з нами одним зі способів, зазначених у контактах.</p>
+</div>
